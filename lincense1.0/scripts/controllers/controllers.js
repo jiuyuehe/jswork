@@ -13,13 +13,26 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).when('/login', {
         controller: 'LoginCtrl',
         templateUrl: '/views/login.html'
-    }).otherwise({redirectTo: '/'});
+    }).when('/list',
+        {
+            controller: 'ListCtrl',
+            templateUrl: '/views/list.html'
+        }
+    ).otherwise({redirectTo: '/'});
 }]);
 
 
 //app.controller('WelCtrl', []);
 
-app.controller('LoginCtrl', ['$scope', '$http', function ($scope, $http, $location) {
+app.controller('LoginCtrl', [
+    '$scope',
+    '$http',
+    '$location',
+    loginCtrl]);
+
+
+
+function loginCtrl($scope, $http, $location) {
     $scope.user = {};
     $scope.login = function () {
         var postDate = {};
@@ -29,15 +42,17 @@ app.controller('LoginCtrl', ['$scope', '$http', function ($scope, $http, $locati
             function (data, status, headers, config) {
                 //成功之后
                 console.log(status);
-                //console.log(data);
-                if (data == "ok") {
-                    $location.path('/list');
-                } else {
-                    $location.path('/');
-                }
+                console.log(data);
+                $location.path('/list');
+                //if (data == "ok") {
+                   // $location.path('/list');
+                //} else {
+                   // console.log("he")
+                   // $location.path('/#/list');
+               // }
             }).error(function (data, status, headers, config) {
                 //处理错误
                 console.log(data);
             });
     }
-}]);
+}
