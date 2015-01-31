@@ -1,10 +1,8 @@
 /**
  * Created by jiuyuehe on 2015/1/27.
  */
-
 'use strict'
-
-var app = angular.module('license', ['license.directives', 'ngRoute']);
+var app = angular.module('license', ['license.directives', 'license.services', 'ngRoute']);
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/', {
         // controller: 'WelCtrl',
@@ -14,13 +12,21 @@ app.config(['$routeProvider', function ($routeProvider) {
         controller: 'LoginCtrl',
         templateUrl: '/views/login.html'
     }).when('/list',
-        {
-            controller: 'ListCtrl',
+        {   controller: 'ListCtrl',
             templateUrl: '/views/list.html'
+        }
+    ).when('/newLic',
+        {
+            templateUrl:'/views/newLic.html'
+        }
+    ).when(
+        '/licInfo/:licId',
+        {
+            controller:'LicInfoCtrl',
+            templateUrl:'/views/licInfo.html'
         }
     ).otherwise({redirectTo: '/'});
 }]);
-
 
 //app.controller('WelCtrl', []);
 
@@ -30,7 +36,39 @@ app.controller('LoginCtrl', [
     '$location',
     loginCtrl]);
 
+app.controller('ListCtrl', ['$scope', '$location', 'LicensesLoader', listCtrl]);
 
+app.controller('NewLicCtrl',['$scope','$location','LicensesLoader',newLicCtrl]);
+
+app.controller('LicInfoCtrl',['$scope','$location','LicensesLoader',licInfoCtrl]);
+
+function  licInfoCtrl($scope,$location,LicensesLoader){
+    LicensesLoader().getLic({id:id})
+
+}
+
+function newLicCtrl($scope,$location,LicensesLoader){
+    $scope.lic = {};
+    $scope.saveLic = function(){
+        LicensesLoader().saveLic($scope.lic).then(
+            function (result){
+                $location.path('/licInfo/'+result.id);
+            }).catch(function (error){
+                console.log(error);
+            });
+    };
+}
+
+function listCtrl($scope, $location, LicensesLoader) {
+    LicensesLoader().getLics(0, 2).then(function (result) {
+        $scope.licPages = result.content;
+        $scope.newLic = function () {
+            $location.path('/newLic/2');
+        };
+    }).catch(function (error) {
+        console.error(error);
+    });
+}
 
 function loginCtrl($scope, $http, $location) {
     $scope.user = {};
@@ -45,11 +83,11 @@ function loginCtrl($scope, $http, $location) {
                 console.log(data);
                 $location.path('/list');
                 //if (data == "ok") {
-                   // $location.path('/list');
+                // $location.path('/list');
                 //} else {
-                   // console.log("he")
-                   // $location.path('/#/list');
-               // }
+                // console.log("he")
+                // $location.path('/#/list');
+                // }
             }).error(function (data, status, headers, config) {
                 //处理错误
                 console.log(data);

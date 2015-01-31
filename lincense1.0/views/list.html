@@ -1,12 +1,24 @@
+
 <div class="panel panel-primary">
-    <div class="panel-heading">Panel heading without title</div>
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary" ng-click="newLic()"> + 增加一条</button>
+    </div>
+    <div class="panel-heading ">
+        - -
+    </div>
     <div class="panel-body">
         <table class="table table-hover">
             <tr>
-                <td>flag</td> <td>name</td><td> time</td> <td>belong</td>
+                <td>版本</td>
+                <td>企业名称</td>
+                <td>到期时间</td>
+                <td>操作</td>
             </tr>
-            <tr>
-                <td> 222</td><td> 222</td> <td> 222</td>
+            <tr ng-repeat="licpage in licPages">
+                <td> {{licpage.maxUser}}</td>
+                <td> {{licpage.entName}}</td>
+                <td> {{licpage.expiry}}</td>
+                <td> >> </td>
             </tr>
         </table>
     </div>
