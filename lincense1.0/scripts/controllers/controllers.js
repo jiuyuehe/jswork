@@ -17,13 +17,13 @@ app.config(['$routeProvider', function ($routeProvider) {
         }
     ).when('/newLic',
         {
-            templateUrl:'/views/newLic.html'
+            templateUrl: '/views/newLic.html'
         }
     ).when(
         '/licInfo/:licId',
         {
-            controller:'LicInfoCtrl',
-            templateUrl:'/views/licInfo.html'
+            controller: 'LicInfoCtrl',
+            templateUrl: '/views/licInfo.html'
         }
     ).otherwise({redirectTo: '/'});
 }]);
@@ -38,29 +38,40 @@ app.controller('LoginCtrl', [
 
 app.controller('ListCtrl', ['$scope', '$location', 'LicensesLoader', listCtrl]);
 
-app.controller('NewLicCtrl',['$scope','$location','LicensesLoader',newLicCtrl]);
+app.controller('NewLicCtrl', ['$scope', '$location', 'LicensesLoader', newLicCtrl]);
 
-app.controller('LicInfoCtrl',['$scope','$location','LicensesLoader',licInfoCtrl]);
+app.controller('LicInfoCtrl', ['$scope', '$location', '$routeParams', 'LicensesLoader', licInfoCtrl]);
 
-function  licInfoCtrl($scope,$location,LicensesLoader){
-    LicensesLoader().getLic({id:id})
+function licInfoCtrl($scope, $location, $routeParams, LicensesLoader) {
+    $scope.params = $routeParams;
+    $scope.curLic = {};
+    console.log($routeParams);
+    //console.log(LicensesLoader.newLic); 需要优化
+    LicensesLoader.getLic({id: $routeParams.licId}).then(
+        function (result) {
+            $scope.curLic = result;
+            console.log(result);
+        }
+    ).catch(function (error) {
+            console.log(error);
+        });
 
 }
 
-function newLicCtrl($scope,$location,LicensesLoader){
+function newLicCtrl($scope, $location, LicensesLoader) {
+    //  $scope.params = $routeParams;
     $scope.lic = {};
-    $scope.saveLic = function(){
-        LicensesLoader().saveLic($scope.lic).then(
-            function (result){
-                $location.path('/licInfo/'+result.id);
-            }).catch(function (error){
-                console.log(error);
-            });
+    $scope.saveLic = function () {
+        LicensesLoader.saveLic($scope.lic).then(function (result) {
+            $location.path('/licInfo/' + result.id);
+        }).catch(function (error) {
+            console.log(error);
+        });
     };
 }
 
 function listCtrl($scope, $location, LicensesLoader) {
-    LicensesLoader().getLics(0, 2).then(function (result) {
+    LicensesLoader.getLics(0, 10).then(function (result) {
         $scope.licPages = result.content;
         $scope.newLic = function () {
             $location.path('/newLic/2');

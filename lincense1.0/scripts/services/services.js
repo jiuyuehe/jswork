@@ -11,38 +11,46 @@ services.factory('Licenses', ['$resource',
     }]);
 
 services.factory('LicensesLoader', ['Licenses', '$q', function (Licenses, $q) {
-    return function () {
-        return {
-            getLics: function (page, size) {
-                var delay = $q.defer();
-                Licenses.get({page: page, size: size}, function (result) {
-                    console.log('result: ', result);
-                    delay.resolve(result);
-                }, function (err) {
-                    console.log('err: ', err)
-                    delay.reject(err || 'error');
-                });
-                return delay.promise;
-            },
-
-            getLic: function (id) {
-                var delay = $q.defer();
-                Licenses.get({id: id}, function (result) {
+    return {
+        newLic: {},
+        getLics: function (page, size) {
+            var delay = $q.defer();
+            Licenses.get({page: page, size: size}, function (result) {
+                console.log('result: ', result);
+                delay.resolve(result);
+            }, function (err) {
+                console.log('err: ', err)
+                delay.reject(err || 'error');
+            });
+            return delay.promise;
+        },
+        getLic: function (idParam) {
+            var self = this,
+                delay = $q.defer();
+            console.log('newLic: ', this.newLic);
+            if (this.newLic[idParam.id]) {
+                setTimeout(function () {
+                    delay.resolve(self.newLic[idParam.id]);
+                }, 100);
+            } else {
+                Licenses.get(idParam, function (result) {
                     delay.resolve(result)
                 }, function (err) {
                     delay.reject(err);
                 });
-                return delay.promise;
-            },
-            saveLic : function (lic) {
-                var delay = $q.defer();
-                Licenses.save(lic, function (result) {
-                    delay.resolve(result);
-                }, function (err) {
-                    delay.reject(err || 'error');
-                });
-                return delay.promise;
             }
+            return delay.promise;
+        },
+        saveLic: function (lic) {
+            var self = this,
+                delay = $q.defer();
+            Licenses.save(lic, function (result) {
+                self.newLic[result.id] = result;
+                delay.resolve(result);
+            }, function (err) {
+                delay.reject(err || 'error');
+            });
+            return delay.promise;
         }
     }
 }]);

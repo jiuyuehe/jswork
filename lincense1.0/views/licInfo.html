@@ -1,5 +1,38 @@
-<div>
-    <h3>{{lic.entName}} > license 信息</h3>
+<div class="pull-right">
+   <a class="inner " href="/#/list"> 回到列表</a>
+    <a class="inner " href=""> 编辑lic</a>
+    <a class="inner "href=""> 下载lic</a>
+</div>
 
-
+<div class="clearfix"></div>
+<div class="panel panel-primary">
+    <!-- Default panel contents -->
+    <div class="panel-heading"><h4>{{curLic.licTo}}</h4></div>
+    <!-- Table -->
+    <table class="table  table-bordered table-hover text-left">
+        <tr>
+            <td>序列号</td>
+            <td>{{curLic.licNo}}</td>
+        </tr>
+        <tr>
+            <td>到期时间</td>
+            <td>{{curLic.expiry}}</td>
+        </tr>
+        <tr>
+            <td>用户数</td>
+            <td>{{curLic.maxUser}}</td>
+        </tr>
+        <tr>
+            <td>版本信息</td>
+            <td>{{curLic.licType}}</td>
+        </tr>
+        <tr>
+            <td>用户状态</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>所属</td>
+            <td></td>
+        </tr>
+    </table>
 </div>

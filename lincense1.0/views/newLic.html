@@ -2,39 +2,45 @@
     <div class="form-group">
         <label  class="col-sm-3 control-label">版本</label>
         <div class="col-sm-7">
-            <select class="form-control" ng-model="lic.type" >
-                <option value="1" selected>试用版</option>
-                <option value="2" >企业版</option>
+            <select class="form-control" ng-model="lic.licType" >
+                <option value="试用版" selected>试用版</option>
+                <option value="企业版" >企业版</option>
             </select>
         </div>
     </div>
     <div class="form-group">
         <label  class="col-sm-3 control-label">企业名称：</label>
         <div class="col-sm-7">
-            <input type="text" class="form-control" ng-model="lic.entName" placeholder="企业名称" ng-maxlength="32"  >
+            <input type="text" class="form-control" ng-model="lic.licTo" placeholder="企业名称" ng-maxlength="32"  >
         </div>
     </div>
     <div class="form-group">
         <label  class="col-sm-3 control-label">机器key：</label>
         <div class="col-sm-7">
-            <input type="text" class="form-control" ng-model="lic.key" placeholder="安装key" ng-maxlength="32"  >
+            <input type="text" class="form-control" ng-model="lic.licNo" placeholder="安装key" ng-maxlength="32"  >
+        </div>
+    </div>
+    <div class="form-group">
+        <label  class="col-sm-3 control-label">用户数：</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" ng-model="lic.maxUser" placeholder="10" ng-maxlength="6"  >
         </div>
     </div>
     <div class="form-group">
         <label  class="col-sm-3 control-label">使用时间</label>
         <div class="col-sm-7">
             <select class="form-control" ng-model="lic.expiry" >
-                <option value="1" selected>15天</option>
-                <option value="2" >30天</option>
-                <option value="2" >60天</option>
-                <option value="2" >无限</option>
+                <option value="15" selected>15天</option>
+                <option value="30" >30天</option>
+                <option value="60" >60天</option>
+                <option value="7650" >无限</option>
             </select>
         </div>
     </div>
     <div class="form-group">
         <label  class="col-sm-3 control-label">客户联系方式：</label>
         <div class="col-sm-7">
-            <input type="text" class="form-control"  placeholder="email，手机号码，qq号码" ng-maxlength="32"  >
+            <input type="text" class="form-control"  ng-model="lic.connect"  placeholder="email，手机号码，qq号码" ng-maxlength="32"  >
         </div>
     </div>
     <div class="form-group">

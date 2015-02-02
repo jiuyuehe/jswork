@@ -1,25 +1,26 @@
+<div class="pull-right">
+    <a class=" " href="/#/newLic"> 增加一条</a>
+</div>
+
+<div class="clearfix"></div>
 
 <div class="panel panel-primary">
-    <div class="pull-right">
-        <button type="button" class="btn btn-primary" ng-click="newLic()"> + 增加一条</button>
-    </div>
     <div class="panel-heading ">
-        - -
+       <h4>当前license 列表</h4>
     </div>
-    <div class="panel-body">
         <table class="table table-hover">
             <tr>
                 <td>版本</td>
                 <td>企业名称</td>
                 <td>到期时间</td>
-                <td>操作</td>
+                <td>用户数</td>
             </tr>
             <tr ng-repeat="licpage in licPages">
-                <td> {{licpage.maxUser}}</td>
-                <td> {{licpage.entName}}</td>
+                <td> {{licpage.licType}}</td>
+                <td><a href="/#/licInfo/{{licpage.id}}">{{licpage.licTo}}</a> </td>
                 <td> {{licpage.expiry}}</td>
-                <td> >> </td>
+                <td> {{licpage.maxUser}}</td>
             </tr>
         </table>
-    </div>
+
 </div>

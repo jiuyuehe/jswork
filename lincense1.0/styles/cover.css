@@ -4,15 +4,13 @@
 
 body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
 
-/* Links */
-a,
-a:focus,
-a:hover {
-    color: #fff;
-}
 
 
 .panel-body {
+    color: #000000;
+}
+
+.table  {
     color: #000000;
 }
 
@@ -39,7 +37,7 @@ body {
 body {
     color: #fff;
     text-align: center;
-    text-shadow: 0 1px 3px rgba(0,0,0,.5);
+    text-shadow: 0 1px 1px rgba(0,0,0,.5);
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
