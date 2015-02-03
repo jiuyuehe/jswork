@@ -12,7 +12,6 @@ services.factory('Licenses', ['$resource',
 
 services.factory('LicensesLoader', ['Licenses', '$q', function (Licenses, $q) {
     return {
-        newLic: {},
         getLics: function (page, size) {
             var delay = $q.defer();
             Licenses.get({page: page, size: size}, function (result) {
@@ -27,25 +26,27 @@ services.factory('LicensesLoader', ['Licenses', '$q', function (Licenses, $q) {
         getLic: function (idParam) {
             var self = this,
                 delay = $q.defer();
-            console.log('newLic: ', this.newLic);
-            if (this.newLic[idParam.id]) {
-                setTimeout(function () {
-                    delay.resolve(self.newLic[idParam.id]);
-                }, 100);
-            } else {
                 Licenses.get(idParam, function (result) {
+                    console.log(result);
                     delay.resolve(result)
                 }, function (err) {
                     delay.reject(err);
                 });
-            }
             return delay.promise;
         },
+        updateLic: function (lic,licId) {
+            var delay = $q.defer();
+            Licenses.save({licId:licId},lic, function (result) {
+                delay.resolve(result);
+            }, function (err) {
+                delay.reject(err || 'error');
+            });
+            return delay.promise;
+        } ,
+
         saveLic: function (lic) {
-            var self = this,
-                delay = $q.defer();
+            var delay = $q.defer();
             Licenses.save(lic, function (result) {
-                self.newLic[result.id] = result;
                 delay.resolve(result);
             }, function (err) {
                 delay.reject(err || 'error');

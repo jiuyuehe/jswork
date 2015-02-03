@@ -1,46 +1,63 @@
-<form class="form-horizontal" ng-controller="NewLicCtrl" >
+<form class="form-horizontal" ng-controller="NewLicCtrl">
     <div class="form-group">
-        <label  class="col-sm-3 control-label">版本</label>
-        <div class="col-sm-7">
-            <select class="form-control" ng-model="lic.licType" >
-                <option value="试用版" selected>试用版</option>
-                <option value="企业版" >企业版</option>
-            </select>
+        <label class="col-sm-3 control-label">版本：</label>
+
+        <div class=" col-sm-7 radio">
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions"
+                       ng-model="lic.licType"
+                       ng-checked="lic.licType === '试用版'"
+                       value="试用版">
+                试用版
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="inlineRadioOptions"
+                       ng-model="lic.licType"
+                       ng-checked="lic.licType === '企业版'"
+                       value="企业版">
+                企业版
+            </label>
         </div>
     </div>
     <div class="form-group">
-        <label  class="col-sm-3 control-label">企业名称：</label>
+        <label class="col-sm-3 control-label">企业名称：</label>
+
         <div class="col-sm-7">
-            <input type="text" class="form-control" ng-model="lic.licTo" placeholder="企业名称" ng-maxlength="32"  >
+            <input type="text" class="form-control" ng-model="lic.licTo" placeholder="企业名称" ng-maxlength="32">
+        </div>
+    </div>
+    <div class="form-group" ng-show="key">
+        <label class="col-sm-3 control-label">lic序列号：</label>
+
+        <div class="col-sm-7">
+            <input type="text" class="form-control" ng-model="lic.licNo" placeholder="安装key" ng-maxlength="32">
+        </div>
+    </div>
+    <div class="form-group" ng-show="mac">
+        <label class="col-sm-3 control-label">机器key：</label>
+
+        <div class="col-sm-7">
+            <input type="text" class="form-control" ng-model="lic.licMac" placeholder="安装key" ng-maxlength="32">
         </div>
     </div>
     <div class="form-group">
-        <label  class="col-sm-3 control-label">机器key：</label>
+        <label class="col-sm-3 control-label">用户数：</label>
+
         <div class="col-sm-7">
-            <input type="text" class="form-control" ng-model="lic.licNo" placeholder="安装key" ng-maxlength="32"  >
+            <input type="text" class="form-control" ng-model="lic.maxUser">
         </div>
     </div>
     <div class="form-group">
-        <label  class="col-sm-3 control-label">用户数：</label>
+        <label class="col-sm-3 control-label">使用时间</label>
         <div class="col-sm-7">
-            <input type="text" class="form-control" ng-model="lic.maxUser" placeholder="10" ng-maxlength="6"  >
+            <input type="text" class="form-control" ng-model="lic.expiry">
         </div>
     </div>
     <div class="form-group">
-        <label  class="col-sm-3 control-label">使用时间</label>
+        <label class="col-sm-3 control-label">客户联系方式：</label>
+
         <div class="col-sm-7">
-            <select class="form-control" ng-model="lic.expiry" >
-                <option value="15" selected>15天</option>
-                <option value="30" >30天</option>
-                <option value="60" >60天</option>
-                <option value="7650" >无限</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label  class="col-sm-3 control-label">客户联系方式：</label>
-        <div class="col-sm-7">
-            <input type="text" class="form-control"  ng-model="lic.connect"  placeholder="email，手机号码，qq号码" ng-maxlength="32"  >
+            <input type="text" class="form-control" ng-model="lic.connect" placeholder="email，手机号码，qq号码" ng-maxlength="32">
         </div>
     </div>
     <div class="form-group">
@@ -48,4 +65,5 @@
             <button type="submit" class="btn btn-primary btn-block" ng-click="saveLic()">好了</button>
         </div>
     </div>
+
 </form>

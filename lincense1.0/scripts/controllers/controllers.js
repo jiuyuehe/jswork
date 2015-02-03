@@ -20,6 +20,11 @@ app.config(['$routeProvider', function ($routeProvider) {
             templateUrl: '/views/newLic.html'
         }
     ).when(
+        '/newLic/:licId', {
+            // controller: 'editLicCtrl',
+            templateUrl: '/views/newLic.html'
+        }
+    ).when(
         '/licInfo/:licId',
         {
             controller: 'LicInfoCtrl',
@@ -38,13 +43,20 @@ app.controller('LoginCtrl', [
 
 app.controller('ListCtrl', ['$scope', '$location', 'LicensesLoader', listCtrl]);
 
-app.controller('NewLicCtrl', ['$scope', '$location', 'LicensesLoader', newLicCtrl]);
+app.controller('NewLicCtrl', ['$scope', '$location', '$routeParams', 'LicensesLoader', newLicCtrl]);
 
 app.controller('LicInfoCtrl', ['$scope', '$location', '$routeParams', 'LicensesLoader', licInfoCtrl]);
+
+app.controller('EditLicCtrl', ['$scope', '$location', '$routeParams', 'LicensesLoader', editLicCtrl]);
 
 function licInfoCtrl($scope, $location, $routeParams, LicensesLoader) {
     $scope.params = $routeParams;
     $scope.curLic = {};
+
+    $scope.editLic = function () {
+        $location.path("/editLic/" + $routeParams.licId);
+    }
+
     console.log($routeParams);
     //console.log(LicensesLoader.newLic); 需要优化
     LicensesLoader.getLic({id: $routeParams.licId}).then(
@@ -55,30 +67,117 @@ function licInfoCtrl($scope, $location, $routeParams, LicensesLoader) {
     ).catch(function (error) {
             console.log(error);
         });
-
 }
 
-function newLicCtrl($scope, $location, LicensesLoader) {
-    //  $scope.params = $routeParams;
+function editLicCtrl($scope, $location, $routeParams, LicensesLoader) {
+    $scope.params = $routeParams;
     $scope.lic = {};
-    $scope.saveLic = function () {
-        LicensesLoader.saveLic($scope.lic).then(function (result) {
-            $location.path('/licInfo/' + result.id);
-        }).catch(function (error) {
+    console.log($routeParams)
+    LicensesLoader.getLic({id: $routeParams.licId}).then(
+        function (result) {
+            //  console.log("edit result:" + result);
+            $scope.lic = result;
+        }
+    ).catch(function (error) {
             console.log(error);
         });
+}
+
+function newLicCtrl($scope, $location, $routeParams, LicensesLoader) {
+    var lic = $scope.lic = {};
+
+    if ($routeParams.licId) {
+        $scope.key = false;
+        $scope.mac = true;
+        LicensesLoader.getLic({id: $routeParams.licId}).then(
+            function (result) {
+                $scope.lic = result;
+            }
+        ).catch(function (error) {
+                console.log(error);
+            });
+    }
+    $scope.saveLic = function () {
+
+        if ($scope.lic.id) {
+            LicensesLoader.updateLic($scope.lic, $scope.lic.licId).then(
+                function (result) {
+                    console.log(result);
+                    $location.path('/licInfo/' + result.id);
+                }
+            ).catch(
+                function (error) {
+                    console.log(error);
+                }
+            );
+        } else {
+            LicensesLoader.saveLic($scope.lic).then(function (result) {
+                $location.path('/licInfo/' + result.id);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
     };
 }
 
 function listCtrl($scope, $location, LicensesLoader) {
-    LicensesLoader.getLics(0, 10).then(function (result) {
+
+    $scope.currentPage = 0;
+
+    $scope.totalPage = 0;
+
+    $scope.licPages = {};
+
+    $scope.first;
+    $scope.last;
+
+    $scope.firsts;
+    $scope.lasts;
+
+    LicensesLoader.getLics($scope.currentPage, 10).then(function (result) {
         $scope.licPages = result.content;
-        $scope.newLic = function () {
-            $location.path('/newLic/2');
-        };
-    }).catch(function (error) {
-        console.error(error);
+        $scope.totalPage = result.totalPages;
+        $scope.totalElements = result.totalElements;
+        $scope.curpage = result.number;
+        $scope.first = result.first;
+        $scope.last = result.last
+        $scope.firsts = result.first == true ? "disabled" : "";
+        $scope.lasts = result.last == true ? "disabled" : ""
     });
+
+    $scope.loadPage = function () {
+        LicensesLoader.getLics($scope.currentPage, 10).then(function (result) {
+            $scope.licPages = result.content;
+            $scope.curpage = result.number;
+            $scope.totalPage = result.totalPages;
+            $scope.totalElements = result.totalElements;
+            $scope.first = result.first;
+            $scope.last = result.last
+            $scope.firsts = result.first == true ? "disabled" : "";
+            $scope.lasts = result.last == true ? "disabled" : ""
+        });
+    }
+
+    $scope.newLic = function () {
+        $location.path('/newLic/2');
+    };
+
+
+    $scope.next = function () {
+        console.log("print is :+ nextPage");
+        if (!$scope.last) {
+            $scope.currentPage++;
+            $scope.loadPage();
+        }
+    }
+    $scope.pre = function () {
+        console.log("print is :+ pre");
+        if (!$scope.first) {
+            $scope.currentPage--;
+            $scope.loadPage();
+        }
+    }
+
 }
 
 function loginCtrl($scope, $http, $location) {
