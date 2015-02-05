@@ -39,6 +39,7 @@ app.controller('LoginCtrl', [
     '$scope',
     '$http',
     '$location',
+    '$rootScope',
     loginCtrl]);
 
 app.controller('ListCtrl', ['$scope', '$location', 'LicensesLoader', listCtrl]);
@@ -180,8 +181,9 @@ function listCtrl($scope, $location, LicensesLoader) {
 
 }
 
-function loginCtrl($scope, $http, $location) {
+function loginCtrl($scope, $http, $location, $rootScope) {
     $scope.user = {};
+    $scope.errorMsg = "帐号默认使用公司邮箱，密码：1-9";
     $scope.login = function () {
         var postDate = {};
         postDate.email = $scope.user.email;
@@ -191,7 +193,15 @@ function loginCtrl($scope, $http, $location) {
                 //成功之后
                 console.log(status);
                 console.log(data);
-                $location.path('/list');
+                if (data == "errorAccountOrPwd") {
+                    $scope.msg = "帐号或者密码有误，请重试！";
+                } else if (data == "error500") {
+                    console.log("系统有误");
+                    $scope.msg = "系统有误,暂时无法登录，请联系技术人员";
+                } else {
+                    $rootScope.ut = data;
+                    $location.path('/list');
+                }
                 //if (data == "ok") {
                 // $location.path('/list');
                 //} else {

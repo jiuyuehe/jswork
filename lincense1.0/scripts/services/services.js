@@ -5,10 +5,19 @@
 'use strict'
 var services = angular.module('license.services', ['ngResource']);
 
-services.factory('Licenses', ['$resource',
-    function ($resource) {
-        return $resource('/api/lics/:id', {id: '@id', page: '@page', size: '@size'});
-    }]);
+// {action1: {method:?, params:?, isArray:?, headers:?, ...},
+
+services.factory('Licenses', function ($resource,$rootScope) {
+    return $resource('/api/sc/lics/:id', {id: '@id', page: '@page', size: '@size'}, {
+        get: {
+            method: "GET",
+            headers: {'ut': $rootScope.ut}
+        }, save: {
+            method: "POST",
+            headers: {'ut': $rootScope.ut}
+        }
+    });
+});
 
 services.factory('LicensesLoader', ['Licenses', '$q', function (Licenses, $q) {
     return {
@@ -26,23 +35,23 @@ services.factory('LicensesLoader', ['Licenses', '$q', function (Licenses, $q) {
         getLic: function (idParam) {
             var self = this,
                 delay = $q.defer();
-                Licenses.get(idParam, function (result) {
-                    console.log(result);
-                    delay.resolve(result)
-                }, function (err) {
-                    delay.reject(err);
-                });
+            Licenses.get(idParam, function (result) {
+                console.log(result);
+                delay.resolve(result)
+            }, function (err) {
+                delay.reject(err);
+            });
             return delay.promise;
         },
-        updateLic: function (lic,licId) {
+        updateLic: function (lic, licId) {
             var delay = $q.defer();
-            Licenses.save({licId:licId},lic, function (result) {
+            Licenses.save({licId: licId}, lic, function (result) {
                 delay.resolve(result);
             }, function (err) {
                 delay.reject(err || 'error');
             });
             return delay.promise;
-        } ,
+        },
 
         saveLic: function (lic) {
             var delay = $q.defer();

@@ -1,30 +1,30 @@
 <p class="lead">登录你的帐号</p>
-<p>帐号默认使用公司邮箱，密码：1-9</p>
-<form class="form-horizontal" ng-controller="LoginCtrl">
+<p ng-model="errorMsg">{{errorMsg}}</p>
+<form class="form-horizontal" ng-controller="LoginCtrl" name="loginForm">
     <div class="form-group">
-        <label for="inputEmail3" class="col-sm-3 control-label">帐号：</label>
+        <label  class="col-sm-3 control-label">帐号：</label>
         <div class="col-sm-7">
-            <input type="email" class="form-control" id="inputEmail3" name="email" ng-model="user.email" placeholder="Email" ng-maxlength="32" focus required>
+            <input type="email" class="form-control"  ng-model="user.email" placeholder="Email" ng-maxlength="32" focus required>
         </div>
     </div>
     <div class="form-group">
-        <label for="inputPassword3" class="col-sm-3 control-label">密码：</label>
+        <label  class="col-sm-3 control-label">密码：</label>
         <div class="col-sm-7">
-            <input type="password" ng-model="user.password" class="form-control" id="inputPassword3" placeholder="Password"  ng-maxlength="16" required>
+            <input type="password" ng-model="user.password" class="form-control"  placeholder="Password" ng-minlength="6" ng-maxlength="16" required>
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-offset-0">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" ng-checked="true" ng-model="user.rem"> 记住
-                </label>
+        <div class="col-sm-offset-3 col-sm-7">
+            <div ng-show="msg" class="btn-danger">
+                 {{msg}}
             </div>
         </div>
     </div>
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-7">
-            <button type="submit" class="btn btn-primary btn-block" ng-click="login()">登入</button>
+            <button type="submit" class="btn btn-primary btn-block"
+                    ng-disabled="!loginForm.$valid"
+                    ng-click="login()">登入</button>
         </div>
     </div>
 </form>
