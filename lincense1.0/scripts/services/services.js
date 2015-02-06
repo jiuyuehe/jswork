@@ -7,7 +7,11 @@ var services = angular.module('license.services', ['ngResource']);
 
 // {action1: {method:?, params:?, isArray:?, headers:?, ...},
 
-services.factory('Licenses', function ($resource,$rootScope) {
+services.factory('Licenses',['$resource','$rootScope', function ($resource, $rootScope) {
+    if (!$rootScope.ut) {
+        $rootScope.ut = "=="
+    }
+    console.log("$rootScope.ut==" + $rootScope.ut);
     return $resource('/api/sc/lics/:id', {id: '@id', page: '@page', size: '@size'}, {
         get: {
             method: "GET",
@@ -17,7 +21,7 @@ services.factory('Licenses', function ($resource,$rootScope) {
             headers: {'ut': $rootScope.ut}
         }
     });
-});
+}]);
 
 services.factory('LicensesLoader', ['Licenses', '$q', function (Licenses, $q) {
     return {
